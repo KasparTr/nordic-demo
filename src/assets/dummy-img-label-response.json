@@ -1,0 +1,26 @@
+{
+  "responses": [
+    {
+      "labelAnnotations": [
+        {
+          "mid": "/m/01z5f",
+          "description": "dog like mammal",
+          "score": 0.9622738,
+          "topicality": 0.9622738
+        },
+        {
+          "mid": "/m/0kpmf",
+          "description": "dog breed",
+          "score": 0.9429579,
+          "topicality": 0.9429579
+        },
+        {
+          "mid": "/m/0bt9lr",
+          "description": "dog",
+          "score": 0.93614197,
+          "topicality": 0.93614197
+        }
+      ]
+    }
+  ]
+}
