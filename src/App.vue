@@ -12,7 +12,11 @@ import BootstrapVue from 'bootstrap-vue'
 Vue.use(BootstrapVue);
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios, axios)
+import AmCharts from 'amcharts3'
+import AmSerial from 'amcharts3/amcharts/serial'
 export default {
   name: 'App',
   components: {
@@ -34,6 +38,6 @@ export default {
 .nordic-logo.medium{
   width: 200px;
   height: auto;
-  margin-bottom: 5em;
+  margin-bottom: 2em;
 }
 </style>
