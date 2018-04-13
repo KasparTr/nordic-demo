@@ -22,7 +22,10 @@
           Top Results
           <b-row>
                 <div v-if = "loadingResults===true" id="loader" style="width: 100%; height: 200px;"></div>
-                <div v-show = "loadingResults===false" id="chartdiv" style="width: 100%; height: 400px;"></div>
+                <div v-show = "loadingResults===false && errorInResponse===false" id="chartdiv" style="width: 100%; height: 400px;"></div>
+                <div v-show= "errorInResponse===true" id="errMsgHolder">{{errorMsg}}</div>
+          </b-row>
+          <b-row>
           </b-row>
         </b-col>
     </b-row>
@@ -42,21 +45,31 @@ export default {
       msg: 'Welcome to Your Vue.js App',
       imgUri: '',
       imageLabels:[],
-      loadingResults: false
+      loadingResults: false,
+      errorInResponse: false,
+      errorMsg: ''
     }
   },
   methods: {
        labelImg(imgUrl){
-         console.log("Labelling...")
+         this.errorInResponse = false;
          this.loadingResults = true
-         var promise = labelImage(imgUrl)
-         promise.then(value =>{
-           console.log("Labelled, here is response:")
-           this.loadingResults = false
-           this.imageLabels = value.response.responses[0].labelAnnotations.slice(0, 0+4)
-           this.makeChart(this.imageLabels)
-
+         labelImage(imgUrl).then(value =>{
+           try{
+             this.checkForErrorsAndThrow(value)
+             this.imageLabels = value.response.responses[0].labelAnnotations.slice(0, 0+4)
+             this.makeChart(this.imageLabels)
+           }catch(err){
+             this.errorMsg = err
+             this.errorInResponse = true
+           }finally {
+             this.loadingResults = false
+           }
          })
+       },
+       checkForErrorsAndThrow(value){
+         if(!value) throw "No response"
+         if(value.errorMsg) throw value.errorMsg
        },
        makeChart(data){
          AmCharts.makeChart("chartdiv",
@@ -119,8 +132,10 @@ a {
   background-color: #778BAE;
 }
 .img-holder.placeholder{
-  background: url('../assets/placeholder.png') no-repeat center;
+  background: url('../assets/logo.png') no-repeat center;
   background-size: contain;
+  padding: 5em;
+  opacity: .6;
 }
 
 .img-uri-input{
@@ -138,6 +153,13 @@ a {
   background-color: #152C53;
   color: white;
   cursor: pointer;
+}
+
+#errMsgHolder{
+  text-align: center;
+  width: 100%;
+  margin-top: 5em;
+  color: red;
 }
 
 </style>
